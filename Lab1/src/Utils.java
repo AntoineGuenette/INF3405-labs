@@ -17,6 +17,9 @@ public class Utils {
         	
         	// Chaque partie contient un ou plusieurs chiffres
             if (!part.matches("\\d+")) return false;
+            
+            // Chaque partie doit commencer par autre chose que 0
+            if (part.length() > 1 && part.startsWith("0")) return false;
 
             // Chaque partie est un nombre entre 0 et 255
             int value = Integer.parseInt(part);
