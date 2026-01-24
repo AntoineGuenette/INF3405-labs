@@ -1,3 +1,6 @@
+import java.util.HashMap;
+import java.util.Map;
+
 public class Utils {
 
     public static boolean isValidIPv4(String ip) {
@@ -27,6 +30,22 @@ public class Utils {
         if (port < 5000 || port > 5050) return false;
         
         return true;
+    }
+    
+    private static final Map<String, String> users = new HashMap<>();
+
+    public static synchronized String authenticate(String username, String password) {
+
+        if (users.containsKey(username)) {
+            if (users.get(username).equals(password)) {
+                return "OK";
+            } else {
+                return "MAUVAIS_MDP";
+            }
+        } else {
+            users.put(username, password);
+            return "COMPTE_CREE";
+        }
     }
     
 }
