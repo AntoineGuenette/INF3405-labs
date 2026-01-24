@@ -66,7 +66,21 @@ public class Client {
                 return;
         }
         
+        // Saisie du nom de l'image à modifier
         System.out.println("\nVeuillez entrer le nom de l'image à modifier:");
+        String imageNameOriginal = scanner.next();
+        
+        // TODO : Vérification que l'image existe
+        
+        // Saisie du nom de l'image filtrée
+        System.out.println("\nVeuillez entrer le nom de l'image filtrée:");
+        String imageNameFiltered = scanner.next();
+        
+        // TODO : Envoi de l'image au serveur
+        System.out.println("\nImage originale envoyée au serveur");
+        
+        // TODO : Lecture de l'image filtrée
+        System.out.println("\nImage filtrée reçue. Accessible via [lien]");
 
         socket.close();
         scanner.close();
