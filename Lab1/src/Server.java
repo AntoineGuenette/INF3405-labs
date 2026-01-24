@@ -10,26 +10,26 @@ public class Server {
 	public static void main(String[] args) throws Exception {
 
         Scanner scanner = new Scanner(System.in);
-
+        
+        // Saisie de l'adresse IP
         System.out.print("Veuillez saisir l'adresse IP : ");
         String ip = scanner.next();
-        
+        // Vérification de l'adresse IP
         if (!Utils.isValidIPv4(ip)) {
             System.out.println("Adresse IP invalide, veuillez réessayer");
             scanner.close();
             return;
         }
-
+        
+        // Saisie du port d'écoute
         System.out.print("Veuillez saisir le port d'écoute : ");
         int port = scanner.nextInt();
-        
+        // Vérification du port d'écoute
         if (!Utils.isValidPort(port)) {
             System.out.println("Port invalide, veuillez réessayer");
             scanner.close();
             return;
         }
-        
-        scanner.close();
         
         // Compteur incrémenté à chaque connexion d'un client au serveur
         int clientNumber = 0;
@@ -48,14 +48,13 @@ public class Server {
             ip,
             port
         );
+        
+        scanner.close();
 
         try {
             // À chaque fois qu'un nouveau client se connecte,
-            // on exécute la fonction run() de l'objet ClientHandler
+            // on exécute la fonction run() de ClientHandler
             while (true) {
-
-                // Important : la fonction accept() est bloquante :
-                // attend qu'un prochain client se connecte
 
                 // Une nouvelle connexion : on incrémente le compteur clientNumber
                 new ClientHandler(
@@ -69,5 +68,4 @@ public class Server {
             Listener.close();
         }
     }
-
 }

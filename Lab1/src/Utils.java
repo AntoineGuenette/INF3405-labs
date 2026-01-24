@@ -3,6 +3,7 @@ import java.util.Map;
 
 public class Utils {
 
+	// Fonction de vérification de l'adresse IP
     public static boolean isValidIPv4(String ip) {
     	// L'adresse ne doit pas être vide
         if (ip == null) return false;
@@ -24,6 +25,7 @@ public class Utils {
         return true;
     }
     
+    // Fonction de vérification du port d'écoute
     public static boolean isValidPort(int port) {
 
         // Le port doit être entre 5000 et 5050
@@ -32,10 +34,9 @@ public class Utils {
         return true;
     }
     
+    // Fonction d'authentification
     private static final Map<String, String> users = new HashMap<>();
-
     public static synchronized String authenticate(String username, String password) {
-
         if (users.containsKey(username)) {
             if (users.get(username).equals(password)) {
                 return "OK";
@@ -47,5 +48,4 @@ public class Utils {
             return "COMPTE_CREE";
         }
     }
-    
 }

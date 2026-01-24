@@ -24,18 +24,18 @@ public class ClientHandler extends Thread {
             String password = in.readUTF();
 
             // Authentification
-            String result = AuthService.authenticate(username, password);
+            String result = Utils.authenticate(username, password);
 
             // Envoi du résultat au client
             out.writeUTF(result);
 
             System.out.println(
-                "Client#" + clientNumber +
+                "Client #" + clientNumber +
                 " (" + username + ") -> " + result
             );
 
         } catch (IOException e) {
-            System.out.println("Erreur avec le client # " + clientNumber + ": " + e);
+            System.out.println("Erreur avec le client #" + clientNumber + ": " + e);
 
         } finally {
             try {
@@ -44,7 +44,7 @@ public class ClientHandler extends Thread {
                 System.out.println("Impossible de fermer le socket");
             }
 
-            System.out.println("Connexion avec le client # " + clientNumber + " fermée");
+            System.out.println("Connexion avec le client #" + clientNumber + " fermée");
         }
     }
 }
