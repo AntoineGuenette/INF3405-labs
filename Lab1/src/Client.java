@@ -14,7 +14,7 @@ public class Client {
         String ip = scanner.next();
         // Vérification de l'adresse IP
         if (!Utils.isValidIPv4(ip)) {
-            System.out.println("Adresse IP invalide, veuillez réessayer");
+            System.out.println("Adresse IP invalide, veuillez réessayer.");
             scanner.close();
             return;
         }
@@ -24,7 +24,7 @@ public class Client {
         int port = scanner.nextInt();
         // Vérification du port d'écoute
         if (!Utils.isValidPort(port)) {
-            System.out.println("Port invalide, veuillez réessayer");
+            System.out.println("Port invalide, veuillez réessayer.");
             scanner.close();
             return;
         }
@@ -35,7 +35,7 @@ public class Client {
         DataInputStream in = new DataInputStream(socket.getInputStream());
 
         // Saisie du nom d'utilisateur + mot de passe
-        System.out.print("Veuillez saisir votre nom d'utilisateur : ");
+        System.out.print("\nVeuillez saisir votre nom d'utilisateur : ");
         String username = scanner.next();
         System.out.print("Veuillez saisir votre mot de passe : ");
         String password = scanner.next();
@@ -55,11 +55,18 @@ public class Client {
                 System.out.println("Compte créé. Connexion acceptée.");
                 break;
             case "MAUVAIS_MDP":
-                System.out.println("Erreur dans la saisie du mot de passe. Veuillez réessayer");
-                break;
+                System.out.println("Erreur dans la saisie du mot de passe. Veuillez réessayer.");
+                socket.close();
+                scanner.close();
+                return;
             default:
                 System.out.println("Réponse inconnue du serveur");
+                socket.close();
+                scanner.close();
+                return;
         }
+        
+        System.out.println("\nVeuillez entrer le nom de l'image à modifier:");
 
         socket.close();
         scanner.close();
