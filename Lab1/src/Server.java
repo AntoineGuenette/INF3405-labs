@@ -16,7 +16,7 @@ public class Server {
         String ip = scanner.next();
         // Vérification de l'adresse IP
         if (!Utils.isValidIPv4(ip)) {
-            System.out.println("Adresse IP invalide, veuillez réessayer");
+            System.out.println("Adresse IP invalide, veuillez réessayer.");
             scanner.close();
             return;
         }
@@ -26,7 +26,7 @@ public class Server {
         int port = scanner.nextInt();
         // Vérification du port d'écoute
         if (!Utils.isValidPort(port)) {
-            System.out.println("Port invalide, veuillez réessayer");
+            System.out.println("Port invalide, veuillez réessayer.");
             scanner.close();
             return;
         }
