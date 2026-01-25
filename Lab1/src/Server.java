@@ -60,7 +60,10 @@ public class Server {
                 new ClientHandler(
                     Listener.accept(),
                     clientNumber++
-                ).start();
+                ).start();   
+                
+                // TODO : stocker la base de données des noms d'utilisateur
+                
             }
 
         } finally {

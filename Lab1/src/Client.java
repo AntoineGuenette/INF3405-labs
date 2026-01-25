@@ -2,6 +2,11 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.File;
+import java.nio.file.Files;
+
 
 public class Client {
 
@@ -66,21 +71,45 @@ public class Client {
                 return;
         }
         
-        // Saisie du nom de l'image à modifier
-        System.out.println("\nVeuillez entrer le nom de l'image à modifier:");
+        // Saisie du nom de l'image originale
+        System.out.println("\nVeuillez entrer le nom de l'image à modifier : ");
         String imageNameOriginal = scanner.next();
-        
-        // TODO : Vérification que l'image existe
-        
+        Path imagePathOriginal = Paths.get(".", "src", imageNameOriginal + ".png");
+        File imageOriginal = imagePathOriginal.toFile();
+
+        // Vérification que l'image originale existe
+        if (!imageOriginal.exists()) {
+            System.out.println("Image inexistante. Veuillez recommencer.");
+            socket.close();
+            scanner.close();
+            return;
+        }
+
         // Saisie du nom de l'image filtrée
-        System.out.println("\nVeuillez entrer le nom de l'image filtrée:");
+        System.out.println("Veuillez entrer le nom de l'image filtrée : ");
         String imageNameFiltered = scanner.next();
-        
-        // TODO : Envoi de l'image au serveur
+
+        // Conversion de l'image originale en bytes
+        byte[] imageBytesOriginal = Files.readAllBytes(imagePathOriginal);
+
+        // Envoi au serveur
+        out.writeUTF(imageOriginal.getName()); 
+        out.writeUTF(imageNameFiltered + ".png");
+        out.writeInt(imageBytesOriginal.length);
+        out.write(imageBytesOriginal);
+        out.flush();
+
         System.out.println("\nImage originale envoyée au serveur");
-        
-        // TODO : Lecture de l'image filtrée
-        System.out.println("\nImage filtrée reçue. Accessible via [lien]");
+
+        // Réception de l'image filtrée
+        int filteredSize = in.readInt();
+        byte[] filteredBytes = new byte[filteredSize];
+        in.readFully(filteredBytes);
+
+        // Sauvegarde de l'image filtrée
+        Path filteredPath = Paths.get(".", "src", imageNameFiltered + ".png");
+        Files.write(filteredPath, filteredBytes);
+        System.out.println("\nImage filtrée reçue : " + filteredPath.toAbsolutePath());
 
         socket.close();
         scanner.close();
