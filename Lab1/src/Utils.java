@@ -51,4 +51,10 @@ public class Utils {
             return "COMPTE_CREE";
         }
     }
+    
+    // Fonction de sauvegarde de la base de données des utilisateurs
+    public static void saveUsers() {
+    	System.out.println("(Fonction à implémenter)");
+    	// TODO : Implémenter la sauvegarde dans un fichier .txt
+    }
 }

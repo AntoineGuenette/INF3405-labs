@@ -72,7 +72,7 @@ public class Client {
         }
         
         // Saisie du nom de l'image originale
-        System.out.println("\nVeuillez entrer le nom de l'image à modifier : ");
+        System.out.println("\nVeuillez entrer le nom de l'image PNG à modifier : ");
         String imageNameOriginal = scanner.next();
         Path imagePathOriginal = Paths.get(".", "src", imageNameOriginal + ".png");
         File imageOriginal = imagePathOriginal.toFile();
