@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.io.File;
 import java.nio.file.Files;
 
-
 public class Client {
 
     public static void main(String[] args) throws Exception {
@@ -20,6 +19,7 @@ public class Client {
         // Vérification de l'adresse IP
         if (!Utils.isValidIPv4(ip)) {
             System.out.println("Adresse IP invalide, veuillez réessayer.");
+            System.out.println("Déconnexion...");
             scanner.close();
             return;
         }
@@ -30,6 +30,7 @@ public class Client {
         // Vérification du port d'écoute
         if (!Utils.isValidPort(port)) {
             System.out.println("Port invalide, veuillez réessayer.");
+            System.out.println("Déconnexion...");
             scanner.close();
             return;
         }
@@ -61,11 +62,13 @@ public class Client {
                 break;
             case "MAUVAIS_MDP":
                 System.out.println("Erreur dans la saisie du mot de passe. Veuillez réessayer.");
+                System.out.println("Déconnexion...");
                 socket.close();
                 scanner.close();
                 return;
             default:
                 System.out.println("Réponse inconnue du serveur");
+                System.out.println("Déconnexion...");
                 socket.close();
                 scanner.close();
                 return;
@@ -80,6 +83,7 @@ public class Client {
         // Vérification que l'image originale existe
         if (!imageOriginal.exists()) {
             System.out.println("Image inexistante. Veuillez recommencer.");
+            System.out.println("Déconnexion...");
             socket.close();
             scanner.close();
             return;
@@ -111,6 +115,8 @@ public class Client {
         Files.write(filteredPath, filteredBytes);
         System.out.println("\nImage filtrée reçue : " + filteredPath.toAbsolutePath());
 
+        // Déconnexion du client
+        System.out.println("Déconnexion...");
         socket.close();
         scanner.close();
     }
