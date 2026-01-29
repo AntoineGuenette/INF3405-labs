@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.awt.Graphics2D;
 
 public class ClientHandler extends Thread {
 
@@ -43,6 +44,7 @@ public class ClientHandler extends Thread {
             
             // Réception des images
             String imageNameOriginal = in.readUTF();
+            String imageExtension = in.readUTF();
             int imageSize = in.readInt();
             byte[] imageBytes = new byte[imageSize];
             in.readFully(imageBytes);
@@ -56,12 +58,25 @@ public class ClientHandler extends Thread {
             
             // Application du filtre Sobel
             BufferedImage filteredImage = Sobel.process(inputImage);
+            
+            // Ignorer le canal alpha pour les fichiers .jpg et .jpeg
+            if ("jpg".equalsIgnoreCase(imageExtension) || "jpeg".equalsIgnoreCase(imageExtension)) {
+                BufferedImage rgbImage = new BufferedImage(
+                        filteredImage.getWidth(),
+                        filteredImage.getHeight(),
+                        BufferedImage.TYPE_INT_RGB
+                );
+                Graphics2D g = rgbImage.createGraphics();
+                g.drawImage(filteredImage, 0, 0, null);
+                g.dispose();
+                filteredImage = rgbImage;
+            }
 
             // Conversion BufferedImage -> bytes
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            boolean success = ImageIO.write(filteredImage, "png", baos);
+            boolean success = ImageIO.write(filteredImage, imageExtension, baos);
             if (!success) {
-                throw new IOException("Impossible d'écrire l'image en PNG");
+                throw new IOException("Impossible d'écrire l'image");
             }
             byte[] filteredBytes = baos.toByteArray();
             

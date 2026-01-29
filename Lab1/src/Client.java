@@ -75,10 +75,23 @@ public class Client {
         }
         
         // Saisie du nom de l'image originale
-        System.out.println("\nVeuillez entrer le nom de l'image PNG à modifier : ");
+        System.out.println("\nVeuillez entrer le nom de l'image à modifier (avec l'extension): ");
         String imageNameOriginal = scanner.next();
-        Path imagePathOriginal = Paths.get(".", "src", imageNameOriginal + ".png");
+        Path imagePathOriginal = Paths.get(".", "src", imageNameOriginal);
         File imageOriginal = imagePathOriginal.toFile();
+        
+        // Extraction et vérification de l'extension de l'image
+        int dotIndex = imageNameOriginal.lastIndexOf('.');
+        String imageExtension = (dotIndex == -1) 
+                ? ""
+                : imageNameOriginal.substring(dotIndex + 1).toLowerCase();
+        if (!(imageExtension.equals("jpg") || imageExtension.equals("jpeg") || imageExtension.equals("png"))) {
+        	System.out.println("Seuls les formtas .jpg, .jpeg et .png sont acceptés.");
+            System.out.println("Déconnexion...");
+            socket.close();
+            scanner.close();
+            return;
+        }
 
         // Vérification que l'image originale existe
         if (!imageOriginal.exists()) {
@@ -90,15 +103,15 @@ public class Client {
         }
 
         // Saisie du nom de l'image filtrée
-        System.out.println("Veuillez entrer le nom de l'image filtrée : ");
+        System.out.println("Veuillez entrer le nom de l'image filtrée (sans l'extension): ");
         String imageNameFiltered = scanner.next();
 
         // Conversion de l'image originale en bytes
         byte[] imageBytesOriginal = Files.readAllBytes(imagePathOriginal);
 
         // Envoi au serveur
-        out.writeUTF(imageOriginal.getName()); 
-        out.writeUTF(imageNameFiltered + ".png");
+        out.writeUTF(imageNameOriginal); 
+        out.writeUTF(imageExtension); 
         out.writeInt(imageBytesOriginal.length);
         out.write(imageBytesOriginal);
         out.flush();
@@ -111,7 +124,7 @@ public class Client {
         in.readFully(filteredBytes);
 
         // Sauvegarde de l'image filtrée
-        Path filteredPath = Paths.get(".", "src", imageNameFiltered + ".png");
+        Path filteredPath = Paths.get(".", "src", imageNameFiltered + "." + imageExtension);
         Files.write(filteredPath, filteredBytes);
         System.out.println("\nImage filtrée reçue : " + filteredPath.toAbsolutePath());
 
