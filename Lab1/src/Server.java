@@ -23,6 +23,7 @@ public class Server {
             if (!Utils.isValidIPv4(ip)) {
                 System.out.println("Adresse IP invalide, veuillez réessayer.");
                 System.out.println("Arrêt du serveur...");
+                scanner.close();
                 return;
             }
 
@@ -33,6 +34,7 @@ public class Server {
             if (!Utils.isValidPort(port)) {
                 System.out.println("Port invalide, veuillez réessayer.");
                 System.out.println("Arrêt du serveur...");
+                scanner.close();
                 return;
             }
 
@@ -48,14 +50,16 @@ public class Server {
 
             // Thread du serveur (gestion des clients)
             Thread serverThread = new Thread(() -> {
+            	
+            	// Création d'un compteur des clients connectés
                 int clientNumber = 0;
 
                 try {
                     while (running) {
                         try {
-                            new ClientHandler(
+                            new ClientHandler( // Exécution d'un nouveau ClientHandler
                                 Listener.accept(),
-                                clientNumber++
+                                clientNumber++ // Augmentation du compteur
                             ).start();
                         } catch (IOException e) {
                             if (running) {
@@ -98,5 +102,6 @@ public class Server {
         } catch (Exception e) {
             System.out.println("Erreur fatale : " + e.getMessage());
         }
+        scanner.close();
     }
 }
