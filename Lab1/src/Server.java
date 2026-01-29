@@ -2,7 +2,10 @@ import java.util.Scanner;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
@@ -37,6 +40,19 @@ public class Server {
                 scanner.close();
                 return;
             }
+            
+            // Ouverture de la base de données des utilisateurs si existante
+            Path databasePath = Paths.get(".", "src", "users.txt");
+            File database = databasePath.toFile();
+
+            // Vérification que l'image originale existe
+            if (!database.exists()) {
+                System.out.println("\nAucune base de données trouvée. Aucun utilisateur préalable ne sera récupéré.");
+            } else if (database.exists()) {
+            	// TODO : Lire le fichier texte + enregistrer la base de données
+            	System.out.println("\nBase de données trouvée. L'ensemble des utilisateurs préalables ont été récupérés.");
+            }
+            System.out.println("Lancement du serveur...");
 
             // Création du socket serveur
             Listener = new ServerSocket();
