@@ -22,6 +22,7 @@ public class Server {
             // Vérification de l'adresse IP
             if (!Utils.isValidIPv4(ip)) {
                 System.out.println("Adresse IP invalide, veuillez réessayer.");
+                System.out.println("Arrêt du serveur...");
                 return;
             }
 
@@ -31,6 +32,7 @@ public class Server {
             // Vérification du port d'écoute
             if (!Utils.isValidPort(port)) {
                 System.out.println("Port invalide, veuillez réessayer.");
+                System.out.println("Arrêt du serveur...");
                 return;
             }
 
