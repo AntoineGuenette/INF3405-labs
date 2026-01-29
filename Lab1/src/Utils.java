@@ -42,7 +42,7 @@ public class Utils {
     public static synchronized String authenticate(String username, String password) {
         if (users.containsKey(username)) {
             if (users.get(username).equals(password)) {
-                return "OK";
+                return "CONNEXION_ACCEPTEE";
             } else {
                 return "MAUVAIS_MDP";
             }

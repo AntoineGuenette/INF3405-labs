@@ -54,11 +54,11 @@ public class Client {
         String response = in.readUTF();
         
         switch (response) {
-            case "OK":
-                System.out.println("Connexion acceptée. Accès au service.");
+            case "CONNEXION_ACCEPTEE":
+                System.out.println("Connexion acceptée.\nAccès au service...");
                 break;
             case "COMPTE_CREE":
-                System.out.println("Compte créé. Connexion acceptée.");
+                System.out.println("Compte créé.\nAccès au service...");
                 break;
             case "MAUVAIS_MDP":
                 System.out.println("Erreur dans la saisie du mot de passe. Veuillez réessayer.");
@@ -103,7 +103,7 @@ public class Client {
         out.write(imageBytesOriginal);
         out.flush();
 
-        System.out.println("\nImage originale envoyée au serveur");
+        System.out.println("\nImage originale envoyée au serveur.");
 
         // Réception de l'image filtrée
         int filteredSize = in.readInt();
