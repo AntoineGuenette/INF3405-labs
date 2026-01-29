@@ -37,13 +37,12 @@ public class ClientHandler extends Thread {
 
             System.out.println("Client #" + clientNumber + " (" + username + ") -> " + result);
             
-            // Format de la date et de l'heure actuel
+            // Format de la date et de l'heure
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd@HH:mm:ss");
             
             // Réception des images
             String imageNameOriginal = in.readUTF();
-            String imageNameFiltered = in.readUTF();
             int imageSize = in.readInt();
             byte[] imageBytes = new byte[imageSize];
             in.readFully(imageBytes);
