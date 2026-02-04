@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,8 +38,21 @@ public class Utils {
         return true;
     }
     
+    public static synchronized void loadUsers() {
+        try {
+            // charge les comptes existants dans la map users
+            users.clear();
+            users.putAll(db.load());
+            System.out.println("DB users chargée : " + users.size() + " compte(s).");
+        } catch (Exception e) {
+            System.out.println("Erreur chargement DB : " + e.getMessage());
+        }
+    }
+
+    
     // Fonction d'authentification
     private static final Map<String, String> users = new HashMap<>();
+    private static UserDatabase db = new UserDatabase("users_db.txt");
     public static synchronized String authenticate(String username, String password) {
         if (users.containsKey(username)) {
             if (users.get(username).equals(password)) {
@@ -48,6 +62,12 @@ public class Utils {
             }
         } else {
             users.put(username, password);
+            
+            try {
+                db.save(users);
+            } catch (IOException e) {
+                System.out.println("Erreur sauvegarde DB : " + e.getMessage());
+            }
             return "COMPTE_CREE";
         }
     }
