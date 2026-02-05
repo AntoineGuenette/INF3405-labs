@@ -1,4 +1,6 @@
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,44 +39,69 @@ public class Utils {
         
         return true;
     }
+
+    private static final Map<String, String> users = new HashMap<>();
+    private static final Path DB_PATH = Paths.get("users_db.txt");
     
+    // Fonction d'authentification
+    public static synchronized String authenticate(String username, String password) {
+        if (users.containsKey(username)) {
+            return users.get(username).equals(password)
+                ? "CONNEXION_ACCEPTEE"
+                : "MAUVAIS_MDP";
+        }
+
+        users.put(username, password);
+        saveUsers();
+        return "COMPTE_CREE";
+    }
+    
+    // Fonction de chargement de la base de données des utilisateurs
     public static synchronized void loadUsers() {
+        users.clear();
+
+        if (!Files.exists(DB_PATH)) {
+            System.out.println("Aucune base de données trouvée : Aucun compte chargé.");
+            return;
+        }
+
         try {
-            // charge les comptes existants dans la map users
-            users.clear();
-            users.putAll(db.load());
-            System.out.println("DB users chargée : " + users.size() + " compte(s).");
-        } catch (Exception e) {
-            System.out.println("Erreur chargement DB : " + e.getMessage());
+            for (String line : Files.readAllLines(DB_PATH, StandardCharsets.UTF_8)) {
+                line = line.trim();
+                if (line.isEmpty() || line.startsWith("#")) continue;
+
+                int idx = line.indexOf(':');
+                if (idx <= 0 || idx == line.length() - 1) continue;
+
+                String user = line.substring(0, idx).trim();
+                String pass = line.substring(idx + 1).trim();
+                users.put(user, pass);
+            }
+            System.out.println("Base de donnée trouvée : " + users.size() + " compte(s) chargé(s).");
+        } catch (IOException e) {
+            System.out.println("Erreur de chargement de la base de données : " + e.getMessage());
         }
     }
 
-    
-    // Fonction d'authentification
-    private static final Map<String, String> users = new HashMap<>();
-    private static UserDatabase db = new UserDatabase("users_db.txt");
-    public static synchronized String authenticate(String username, String password) {
-        if (users.containsKey(username)) {
-            if (users.get(username).equals(password)) {
-                return "CONNEXION_ACCEPTEE";
-            } else {
-                return "MAUVAIS_MDP";
+    // Fonction de sauvegarde de la base de données des utilisateurs
+    public static synchronized void saveUsers() {
+        try {
+            if (!Files.exists(DB_PATH)) {
+                Files.createFile(DB_PATH);
             }
-        } else {
-            users.put(username, password);
-            
-            try {
-                db.save(users);
-            } catch (IOException e) {
-                System.out.println("Erreur sauvegarde DB : " + e.getMessage());
+
+            try (BufferedWriter writer = Files.newBufferedWriter(DB_PATH, StandardCharsets.UTF_8)) {
+                writer.write("# format: username:password");
+                writer.newLine();
+                for (Map.Entry<String, String> e : users.entrySet()) {
+                    writer.write(e.getKey() + ":" + e.getValue());
+                    writer.newLine();
+                }
             }
-            return "COMPTE_CREE";
+            System.out.println("Base de données sauvegardée.");
+        } catch (IOException e) {
+            System.out.println("Erreur de sauvegarde de la base de données : " + e.getMessage());
         }
     }
     
-    // Fonction de sauvegarde de la base de données des utilisateurs
-    public static void saveUsers() {
-    	System.out.println("(Fonction à implémenter)");
-    	// TODO : Implémenter la sauvegarde dans un fichier .txt
-    }
 }
