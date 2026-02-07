@@ -36,7 +36,7 @@ public class ClientHandler extends Thread {
             // Envoi du résultat au client
             out.writeUTF(result);
 
-            System.out.println("Client #" + clientNumber + " (" + username + ") -> " + result);
+            System.out.println("Client #" + clientNumber + " (" + username + ") - " + result);
             
             // Format de la date et de l'heure
             LocalDateTime now = LocalDateTime.now();
@@ -49,12 +49,16 @@ public class ClientHandler extends Thread {
             byte[] imageBytes = new byte[imageSize];
             in.readFully(imageBytes);
             
-            // Conversion bytes -> BufferedImage
+            // Conversion bytes en BufferedImage
             BufferedImage inputImage = ImageIO.read(new ByteArrayInputStream(imageBytes));
             if (inputImage == null) {
                 throw new IOException("Image non reconnue ou format invalide");
             }
-            System.out.println("[" + username + " - " + socket.getRemoteSocketAddress() + " - " + now.format(formatter) + "] : Image " + imageNameOriginal + " reçue pour traitement");
+            
+            String ip = socket.getInetAddress().getHostAddress();
+            int port = socket.getPort();
+
+            System.out.println("[" + username + " - " + ip + ":" + port + " - " + now.format(formatter) + "] : Image " + imageNameOriginal + " reçue pour traitement");
             
             // Application du filtre Sobel
             BufferedImage filteredImage = Sobel.process(inputImage);
@@ -72,7 +76,7 @@ public class ClientHandler extends Thread {
                 filteredImage = rgbImage;
             }
 
-            // Conversion BufferedImage -> bytes
+            // Conversion BufferedImage en bytes
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             boolean success = ImageIO.write(filteredImage, imageExtension, baos);
             if (!success) {
