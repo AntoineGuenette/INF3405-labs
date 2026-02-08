@@ -18,7 +18,7 @@ public class ClientHandler extends Thread {
     public ClientHandler(Socket socket, int clientNumber) {
         this.socket = socket;
         this.clientNumber = clientNumber;
-        System.out.println("\nNouvelle connexion avec le client #" + clientNumber + " at " + socket);
+        System.out.println("\nNouvelle connexion avec le client #" + clientNumber + " avec " + socket);
     }
 
     public void run() {
