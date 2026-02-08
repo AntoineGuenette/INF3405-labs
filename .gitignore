@@ -209,3 +209,11 @@ __marimo__/
 # macOS
 .DS_Store
 /.metadata/
+
+# Images for Lab1
+!Lab1*/**/*.png
+!Lab1*/**/*.jpg
+!Lab1*/**/*.jpeg
+
+# User database for Lab1
+!Lab1*/**/users_db.txt
