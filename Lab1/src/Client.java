@@ -77,7 +77,7 @@ public class Client {
         // Saisie du nom de l'image originale
         System.out.println("\nVeuillez entrer le nom de l'image à modifier (avec l'extension): ");
         String imageNameOriginal = scanner.next();
-        Path imagePathOriginal = Paths.get(imageNameOriginal);
+        Path imagePathOriginal = Paths.get(".", "src", imageNameOriginal);
         File imageOriginal = imagePathOriginal.toFile();
         
         // Extraction et vérification de l'extension de l'image
@@ -124,7 +124,7 @@ public class Client {
         in.readFully(filteredBytes);
 
         // Sauvegarde de l'image filtrée
-        Path filteredPath = Paths.get(imageNameFiltered + "." + imageExtension);
+        Path filteredPath = Paths.get(".", "src", imageNameFiltered + "." + imageExtension);
         Files.write(filteredPath, filteredBytes);
         System.out.println("\nImage filtrée reçue : " + filteredPath.toAbsolutePath());
 
