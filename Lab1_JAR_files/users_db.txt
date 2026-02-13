@@ -1,2 +1,0 @@
-# format: username:password
-ag:ag
